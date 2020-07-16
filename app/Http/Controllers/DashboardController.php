@@ -1,7 +1,7 @@
 <?php namespace App\Http\Controllers;
 
 use App\Models\AppUser;
-use Illuminate\Support\Facades\Input;
+use Request;
 
 class DashboardController extends Controller
 {
@@ -10,7 +10,7 @@ class DashboardController extends Controller
 //        $username = $_GET["txt_username"];
 
 
-        $username = Input::get("txt_username");
+        $username = Request::input("txt_username");
 
         $users = AppUser::select()
             ->count();
@@ -44,7 +44,7 @@ class DashboardController extends Controller
 
     function deleteUser()
     {
-        $id = Input::get("txt_id");
+        $id = Request::input("txt_id");
         $delete = AppUser::where("id", "=", $id)
             ->delete();
         if ($delete)

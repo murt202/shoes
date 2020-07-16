@@ -1,6 +1,6 @@
 <?php namespace App\Http\Controllers;
 
-use App\Http\Requests\Request;
+use Request;
 use App\Models\Cart;
 use App\Models\Order;
 use App\Models\OrderedProducts;
@@ -38,8 +38,8 @@ class CartController extends Controller {
     public function addToCart()
     {
 
-        $id = Input::get('id');
-        $quant = Input::get('quantity');
+        $id = Request::input('id');
+        $quant = Request::input('quantity');
         $uid = Session::get('user_id');
         $pid = Product::select("id")
             ->where("id","=",$id)
@@ -88,7 +88,7 @@ class CartController extends Controller {
 
     function deleteFromCart(){
 
-        $id = Input::get('id');
+        $id = Request::input('id');
 
         $delete = Cart::select()
             ->where("pid","=",$id)

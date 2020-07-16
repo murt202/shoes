@@ -5,7 +5,7 @@ use App\Models\AppUser;
 use App\Models\Cart;
 use App\Models\Product;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Input;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 
@@ -32,17 +32,17 @@ class AdminController extends Controller
     function addProduct()
     {
 
-        $name = Input::get('txt_name');
-        $price = Input::get('txt_price');
-        $type = Input::get('txt_type');
-        $description = Input::get('txt_area_description');
+        $name = Request::input('txt_name');
+        $price = Request::input('txt_price');
+        $type = Request::input('txt_type');
+        $description = Request::input('txt_area_description');
 
-        if(Input::file('img_product') != null)
+        if(Request::file('img_product') != null)
         {
             $destinationPath = 'images'; // upload path
-            $extension = Input::file('img_product')->getClientOriginalExtension(); // getting image extension
+            $extension = Request::file('img_product')->getClientOriginalExtension(); // getting image extension
             $fileName = rand(11111,99999).'.'.$extension; // rename image
-            Input::file('img_product')->move($destinationPath, $fileName); // uploading file to given path
+            Request::file('img_product')->move($destinationPath, $fileName); // uploading file to given path
             $image = $fileName;
 
         }
@@ -72,7 +72,7 @@ class AdminController extends Controller
 
     function deleteProduct()
     {
-        $id = Input::get("txt_id");
+        $id = Request::input("txt_id");
         $delete = Product::select()
             ->where("id", "=", $id)
             ->delete();
@@ -88,7 +88,7 @@ class AdminController extends Controller
 
     function showEditProduct()
     {
-        $pid = Input::get('txt_id');
+        $pid = Request::input('txt_id');
 
         $product = Product::select()
             ->where("id","=",$pid)
@@ -106,11 +106,11 @@ class AdminController extends Controller
     
     function editProduct()
     {
-        $id = Input::get("id");
-        $name = Input::get("txt_name");
-        $price = Input::get("txt_price");
-        $type = Input::get("txt_type");
-        $description = Input::get("txt_description");
+        $id = Request::input("id");
+        $name = Request::input("txt_name");
+        $price = Request::input("txt_price");
+        $type = Request::input("txt_type");
+        $description = Request::input("txt_description");
 
         $check =  Product::select()
             ->where("id","=",$id)

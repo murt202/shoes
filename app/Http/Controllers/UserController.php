@@ -3,7 +3,7 @@
 use App\Models\Admin;
 use App\Models\AppUser;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Input;
+use Request;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 
@@ -19,8 +19,8 @@ class UserController extends Controller
 
     function validateLogin()
     {
-        $username = Input::get("txt_username");
-        $password = Input::get("txt_password");
+        $username = Request::input("txt_username");
+        $password = Request::input("txt_password");
 
         $admin = Admin::select()
             ->where("username","=",$username)
@@ -29,8 +29,8 @@ class UserController extends Controller
 
         if(count($admin) > 0)
         {
-            Session::set("admin",true);
-            Session::set("user_id", $admin[0]["id"]);
+            Session::put("admin",true);
+            Session::put("user_id", $admin[0]["id"]);
             return redirect()->route("home");
         }
         else
@@ -43,7 +43,7 @@ class UserController extends Controller
 
             if (count($user) > 0)
             {
-                Session::set("user_id", $user[0]["id"]);
+                Session::put("user_id", $user[0]["id"]);
 
                 return redirect()->route("home");
             }
@@ -82,7 +82,7 @@ class UserController extends Controller
         ];
         var_dump($message);
 
-        $validator = Validator::make(Input::all(), [
+        $validator = Validator::make(Request::all(), [
             "txt_first" => "required",
             "txt_last" => "required",
             "txt_username" => "required",
@@ -94,12 +94,12 @@ class UserController extends Controller
 
         if ($validator->passes()) {
             $create = AppUser::create([
-                "first_name" => Input::get("txt_first"),
-                "last_name" => Input::get("txt_last"),
-                "username" => Input::get("txt_username"),
-                "password" => Input::get("txt_password"),
-                "email" => Input::get("txt_email"),
-                "mobile" => Input::get("txt_mob_num")
+                "first_name" => Request::input("txt_first"),
+                "last_name" => Request::input("txt_last"),
+                "username" => Request::input("txt_username"),
+                "password" => Request::input("txt_password"),
+                "email" => Request::input("txt_email"),
+                "mobile" => Request::input("txt_mob_num")
 
             ]);
             if ($create) {
@@ -111,7 +111,7 @@ class UserController extends Controller
         }
         else {
 
-            echo Input::get("txt_password")." ".Input::get("txt_password_confirmation");
+            echo Request::input("txt_password")." ".Request::input("txt_password_confirmation");
             return redirect()->route("show-register-page")->with("message", $validator->errors()->first());
         }
     }
@@ -123,7 +123,7 @@ class UserController extends Controller
 
     public function postChangePassword()
     {
-        $validator = Validator::make(Input::all(), [
+        $validator = Validator::make(Request::all(), [
             "txt_old" => "required",
             "txt_new" => "required|confirmed",
             "txt_new_confirmation" => "required"
@@ -133,15 +133,15 @@ class UserController extends Controller
         {
             $check = AppUser::select()
                 ->where("id", "=", Session::get("user_id"))
-                ->where("password", "=", Input::get("txt_old"))
+                ->where("password", "=", Request::input("txt_old"))
                 ->count();
             if ($check > 0)
             {
                 $update = AppUser::select()
                     ->where("id", "=", Session::get("user_id"))
-                    ->where("password", "=", Input::get("txt_old"))
+                    ->where("password", "=", Request::input("txt_old"))
                     ->update([
-                        "password" => Input::get("txt_new")
+                        "password" => Request::input("txt_new")
                     ]);
                 
                 if ($update)

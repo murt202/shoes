@@ -16,7 +16,9 @@ Route::get('about_us',[
     "uses" => 'UserController@showAboutPage'
 ]);
 
-Route::get('/', 'WelcomeController@index');
+// Route::get('/', function() {
+//     return redirect('home');
+// });
 
 Route::get('home',[
     "as" => 'home',
@@ -53,13 +55,12 @@ Route::post('home/checkout',[
     "as" => "checkout",
     "uses" => "CartController@checkout"
 ]);
-//Route::get('home/product', 'HomeController@showProduct');
+
 Route::get('home/product',[
     "as" => "product",
     "uses" => "HomeController@showProduct"
 ]);
 
-//Route::post('login-post', 'LoginController@validateLogin');
 
 //User Routes
 

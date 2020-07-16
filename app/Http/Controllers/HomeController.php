@@ -1,7 +1,7 @@
 <?php namespace App\Http\Controllers;
 
 use App\Models\Product;
-use Illuminate\Support\Facades\Input;
+use Request;
 
 class HomeController extends Controller {
 
@@ -67,7 +67,7 @@ class HomeController extends Controller {
 
     public function showProduct() {
 
-        $pid = Input::get('pid');
+        $pid = Request::input('pid');
         $products = Product::select()
             ->where("id","=",$pid)
             ->get();
