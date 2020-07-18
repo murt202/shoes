@@ -21,15 +21,16 @@ Alternately you can install and setup PHP and SQL individually as well.
 
 To install Composer use the following link: [https://getcomposer.org/download/](https://getcomposer.org/download/)
 
-Next, to install all the dependencies for the project run the following command
+Next, to install all the dependencies for the project run the following command in the terminal opened in the project directory
 ```
 composer install
 ```
 
-After the dependencies are installed without any errors, make sure your SQL server is running and then navigate to the project directory in the terminal and run the migrate command to create the database tables and fill in some dummy values
+After the dependencies are installed without any errors, make sure your SQL server is running and then run the migrate command to create the database tables and fill in some dummy values
 
 ```
 php artisan migrate 
+php db:seed
 ```
 ### Configuration
 
@@ -40,7 +41,6 @@ DB_HOST=localhost
 DB_DATABASE=<database name>
 DB_USERNAME=<username>
 DB_PASSWORD=<password>
-
 ```
 
 

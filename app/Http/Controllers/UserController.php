@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\DB;
 use Request;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
@@ -24,28 +25,37 @@ class UserController extends Controller
 
         $admin = Admin::select()
             ->where("username","=",$username)
-            ->where("password", "=", $password)
             ->get();
 
         if(count($admin) > 0)
         {
-            Session::put("admin",true);
-            Session::put("user_id", $admin[0]["id"]);
-            return redirect()->route("home");
+            if(Hash::check($password, $admin[0]["password"])){
+                Session::put("admin",true);
+                Session::put("user_id", $admin[0]["id"]);
+                return redirect()->route("home");
+            }
+            else
+            {
+                return redirect("login")->with("message", "Invalid credentials");
+            }
+            
         }
         else
         {
             $user = AppUser::select()
                 ->where("username", "=", $username)
-                ->where("password", "=", $password)
                 ->get();
 
 
             if (count($user) > 0)
             {
-                Session::put("user_id", $user[0]["id"]);
-
-                return redirect()->route("home");
+                if(Hash::check($password, $user[0]["password"])){
+                    Session::put("user_id", $user[0]["id"]);
+                    return redirect()->route("home");
+                }
+                else{
+                    return redirect("login")->with("message", "Invalid credentials");
+                }
             }
             else
             {
